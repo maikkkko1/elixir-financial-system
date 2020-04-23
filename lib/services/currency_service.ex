@@ -15,7 +15,7 @@ defmodule CurrencyService do
   plug(Tesla.Middleware.JSON)
 
   @doc """
-  Return the currency conversion.
+  Handle the currency conversion.
 
   ## Parameters
 
