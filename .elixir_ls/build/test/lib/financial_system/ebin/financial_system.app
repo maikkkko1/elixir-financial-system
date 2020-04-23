@@ -1,0 +1,13 @@
+{application,financial_system,
+             [{applications,[kernel,stdlib,elixir,logger,sqlite_ecto2,ecto,
+                             jason,poison,hackney,cowboy,tesla,plug,
+                             plug_cowboy]},
+              {description,"financial_system"},
+              {modules,['Elixir.Account','Elixir.AccountController',
+                        'Elixir.AccountService','Elixir.CurrencyService',
+                        'Elixir.FinancialSystem.Application',
+                        'Elixir.FinancialSystem.Repo','Elixir.Transaction',
+                        'Elixir.Util']},
+              {registered,[]},
+              {vsn,"0.1.0"},
+              {mod,{'Elixir.FinancialSystem.Application',[]}}]}.
