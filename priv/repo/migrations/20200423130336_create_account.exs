@@ -11,7 +11,7 @@ defmodule FinancialSystem.Repo.Migrations.CreateAccount do
       add(:number, :integer)
       add(:agency, :integer)
       add(:currency, :string)
-      add(:balance, :float)
+      add(:balance, :number)
       timestamps()
     end
   end

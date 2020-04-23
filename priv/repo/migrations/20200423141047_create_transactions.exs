@@ -5,7 +5,7 @@ defmodule FinancialSystem.Repo.Migrations.CreateTransactions do
     create table(:transactions) do
       add(:account_number_from, :integer)
       add(:account_number_to, :integer)
-      add(:amount, :float)
+      add(:amount, :number)
       timestamps()
     end
   end
