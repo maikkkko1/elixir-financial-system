@@ -7,7 +7,17 @@ defmodule FinancialSystem.MixProject do
       version: "0.1.0",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+
+      # Docs
+      name: "Financial System",
+      source_url: "https://github.com/maikkkko1/elixir-financial-system",
+      homepage_url: "https://github.com/maikkkko1/elixir-financial-system",
+      docs: [
+        # The main page in the docs
+        main: "FinancialSystem",
+        extras: ["README.md"]
+      ]
     ]
   end
 
