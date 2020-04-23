@@ -6,9 +6,10 @@ defmodule Transaction do
   use Ecto.Schema
 
   schema "transactions" do
-    field(:account_number_from, :integer, null: false)
-    field(:account_number_to, :integer, null: false)
-    field(:amount, :float, null: false)
+    field(:transaction_type, :integer, null: false)
+    field(:account_number_from, :integer, null: true)
+    field(:account_number_to, :integer, null: true)
+    field(:amount, :integer, null: false)
     timestamps()
   end
 end

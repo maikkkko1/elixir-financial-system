@@ -1,6 +1,6 @@
 defmodule CurrencyService do
   @moduledoc """
-  Currency service, handle the currency logic operations.
+  Currency service, handle currency logic operations.
   """
 
   @base_url "https://api.exchangeratesapi.io/latest"
@@ -98,7 +98,7 @@ defmodule CurrencyService do
 
   @spec get_valid_currencies :: [...]
   def get_valid_currencies do
-    {:ok, rates} = get_latest_rates()
+    {:ok, rates} = get_latest_rates("USD")
 
     Map.keys(rates["rates"])
   end

@@ -40,7 +40,8 @@ defmodule FinancialSystem.MixProject do
       {:cowboy, "~> 2.4"},
       {:poison, "~> 3.1"},
       {:plug, "~> 1.6"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:money, "~> 1.4"}
     ]
   end
 end
