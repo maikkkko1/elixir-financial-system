@@ -61,7 +61,13 @@ defmodule AccountService do
         |> where([account], account.number == ^account_number)
       )
 
-    if format, do: Money.new(balance) |> to_string, else: balance
+    if balance != nil do
+      format_balance = if format, do: Money.new(balance) |> to_string, else: balance
+
+      {:ok, format_balance}
+    else
+      {:error, "Account not found"}
+    end
   end
 
   @spec get_account_by_number(integer) :: boolean | Account
