@@ -15,7 +15,7 @@ defmodule FinancialSystem.MixProject do
       homepage_url: "https://github.com/maikkkko1/elixir-financial-system",
       docs: [
         # The main page in the docs
-        main: "FinancialSystem",
+        main: "api-reference",
         extras: ["README.md"]
       ]
     ]

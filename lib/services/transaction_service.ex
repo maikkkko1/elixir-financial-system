@@ -6,13 +6,30 @@ defmodule TransactionService do
   # Transaction types.
   @transaction_deposit 1
   @transaction_transfer 2
-  @transaction_split 3
-  @transaction_withdraw 4
+  @transaction_withdraw 3
 
   alias FinancialSystem.Repo, as: DB
 
   import Ecto.Query
 
+  @doc """
+  Make a new deposit in the indicated account.
+
+  ## Parameters
+
+    - account_number: Integer that represents the account number to deposit.
+    - currency - String that represents the deposit currency. Ex: "brl", "usd", "eur"
+    - amount: Integer that represents the amount to deposit. Ex: 100 = 1,00 | 1000 = 10,00 | 5050 = 50,50
+
+  ## Examples
+
+      iex> TransactionService.deposit(1, "brl", 1000) # Depositing in account number 1, with the currency BRL, amount of 10,00.
+      iex> TransactionService.deposit(1, "usd", 1000) # If the account currency is BRL, before make the deposit will exchange 10,00 USD to BRL.
+      iex> TransactionService.deposit(1, "brl", 2050) # Depositing in account number 1, with the currency BRL, amount of 20,50.
+
+  """
+  @spec deposit(integer, String.t(), integer) ::
+          {:error, String.t()} | {:ok, Account | String.t()}
   def deposit(account_number, currency, amount) do
     validate_params = validate_transaction_params(account_number, currency, amount)
 
@@ -40,6 +57,24 @@ defmodule TransactionService do
     end
   end
 
+  @doc """
+  If the account has sufficient funds, make a new withdraw in the indicated account.
+
+  ## Parameters
+
+    - account_number: Integer that represents the account number to withdraw.
+    - currency - String that represents the withdraw currency. Ex: "brl", "usd", "eur"
+    - amount: Integer that represents the amount to withdraw. Ex: 100 = 1,00 | 1000 = 10,00 | 5050 = 50,50
+
+  ## Examples
+
+      iex> TransactionService.withdraw(1, "brl", 1000) # Withdrawing in account number 1, with the currency BRL, amount of 10,00.
+      iex> TransactionService.withdraw(1, "usd", 1000) # If the account currency is BRL, before make the withdraw will exchange 10,00 USD to BRL.
+      iex> TransactionService.withdraw(1, "brl", 2050) # Withdrawing in account number 1, with the currency BRL, amount of 20,50.
+
+  """
+  @spec withdraw(integer, String.t(), integer) ::
+          {:error, String.t()} | {:ok, Account | String.t()}
   def withdraw(account_number, currency, amount) do
     validate_params = validate_transaction_params(account_number, currency, amount)
 
@@ -72,6 +107,24 @@ defmodule TransactionService do
     end
   end
 
+  @doc """
+  If the account has sufficient funds even with currency exchange, make a new transfer to the indicated account.
+
+  ## Parameters
+
+    - account_number_from: Integer that represents the account number to transfer from.
+    - account_number_to - Integer that represents the account number to transfer to.
+    - amount: Integer that represents the amount to transfer. Ex: 100 = 1,00 | 1000 = 10,00 | 5050 = 50,50
+
+  ## Examples
+
+      iex> TransactionService.transfer(1, 2 1000) # Transfering from account number 1 to account number 2 the amount of 10,00.
+      iex> TransactionService.transfer(1, 2, 2050) # Transfering from account number 1 to account number 2 the amount of 20,50.
+
+  """
+  @spec transfer(integer, integer, integer) ::
+          {:error, String.t()}
+          | {:ok, %{account_from_new_balance: String.t(), account_to_new_balance: String.t()}}
   def transfer(account_number_from, account_number_to, amount) do
     validate_params = validate_transfer_params(account_number_from, account_number_to, amount)
 
@@ -113,41 +166,53 @@ defmodule TransactionService do
     end
   end
 
-  def split(account_from_number, split_details, total_amount) do
-    validate_params = validate_split_params(account_from_number, split_details, total_amount)
+  @doc """
+  Split a transaction in several accounts.
+
+  ## Parameters
+
+    - split_details: List that represents the accounts and percentages to split the transaction.
+    - total_amount: Integer that represents the total amount to split. Ex: 100 = 1,00 | 1000 = 10,00 | 5050 = 50,50
+
+  ## Examples
+    # Spliting between account number 1 and account number 2 the total amount of 20,00.
+      iex> TransactionService.split([%{account_number: 2, percentage: 75}, %{account_number: 3, percentage: 25}], 2000)
+
+  """
+  @spec split(list, integer) :: {:error, String.t()} | {:ok, true}
+  def split(split_details, total_amount) do
+    validate_params = validate_split_params(split_details, total_amount)
 
     case validate_params do
       {:error, _error} ->
         validate_params
 
       {:ok, _ok} ->
-        account_from = AccountService.get_account_by_number(account_from_number)
         validate_percentage = valid_split_percentage?(split_details)
 
-        validate_split_accounts = valid_split_accounts?(account_from_number, split_details)
+        validate_split_accounts = valid_split_accounts?(split_details)
 
         cond do
-          account_from.balance < total_amount ->
-            {:error, "Insufficient funds!"}
-
-          !account_from ->
-            {:error, "Account from not found!"}
-
           !validate_percentage ->
-            {:error, "Invalid split percentage in accounts!"}
+            {:error,
+             "Invalid split percentage in accounts! The sum of all percentages must be 100."}
 
           validate_split_accounts !== true ->
             {:error, validate_split_accounts}
 
           true ->
-            execute_split(account_from_number, split_details, total_amount)
+            execute_split(split_details, total_amount)
 
             {:ok, true}
         end
     end
   end
 
-  @spec get_all_transactions :: any
+  @doc """
+  Return all transactions.
+
+  """
+  @spec get_all_transactions :: [Transaction]
   def get_all_transactions do
     DB.all(
       Transaction
@@ -155,27 +220,27 @@ defmodule TransactionService do
     )
   end
 
-  defp execute_split(account_number_from, split_details, total_amount) do
+  defp execute_split(split_details, total_amount) do
     Enum.each(split_details, fn detail ->
-      amount_transfer = total_amount - detail.percentage * total_amount / 100
+      amount_transfer = detail.percentage * total_amount / 100
 
-      transfer(account_number_from, detail.account_number, trunc(amount_transfer))
+      account = AccountService.get_account_by_number(detail.account_number)
+
+      deposit(detail.account_number, account.currency, trunc(amount_transfer))
     end)
   end
 
   defp valid_split_percentage?(split_details) do
     total_percentage = get_total_split_percentage(split_details)
 
-    total_percentage <= 100 && total_percentage > 0
+    total_percentage == 100
   end
 
   defp get_total_split_percentage(split_details) do
     Enum.reduce(split_details, fn x, y -> x.percentage + y.percentage end)
   end
 
-  defp valid_split_accounts?(account_from_number, split_details) do
-    account_from = AccountService.get_account_by_number(account_from_number)
-
+  defp valid_split_accounts?(split_details) do
     valid_accounts =
       Enum.reduce_while(split_details, [], fn el, _acc ->
         account = AccountService.get_account_by_number(el.account_number)
@@ -188,18 +253,13 @@ defmodule TransactionService do
             {:halt, "Account #{el.account_number} not found!"}
 
           _ ->
-            if account_from.currency != account.currency do
-              {:halt, "Split between accounts with diferrent currencies isn't available yet."}
-            else
-              {:cont, true}
-            end
+            {:cont, true}
         end
       end)
 
     valid_accounts
   end
 
-  @spec has_funds?(any, any, any, binary) :: boolean
   defp has_funds?(balance, account_currency, amount, currency) do
     converted_amount = handle_currency_exchange(currency, account_currency, amount)
 
@@ -218,7 +278,6 @@ defmodule TransactionService do
      }}
   end
 
-  @spec handle_currency_exchange(binary, any, any) :: any
   defp handle_currency_exchange(currency, account_currency, amount) do
     if String.upcase(currency) == account_currency do
       amount
@@ -292,11 +351,8 @@ defmodule TransactionService do
     end
   end
 
-  defp validate_split_params(account_number_from, split_details, amount) do
+  defp validate_split_params(split_details, amount) do
     cond do
-      !is_integer(account_number_from) ->
-        {:error, "Invalid account number from! Must be a integer value!"}
-
       !is_list(split_details) ->
         {:error, "Invalid split details! Must be a list"}
 

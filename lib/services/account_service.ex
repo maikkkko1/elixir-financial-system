@@ -51,6 +51,25 @@ defmodule AccountService do
     end
   end
 
+  @doc """
+  Return the account balance.
+
+  ## Parameters
+
+    - account_number: Integer that represents the account number.
+    - format: Boolean that represents if the balance will be formatted or not. DEFAULT FALSE - Ex: formatted = "10,00" | unformatted = 1000
+
+  ## Examples
+
+      iex> AccountService.get_account_balance_by_number(2)
+      {:ok, 3000}
+
+      iex> AccountService.get_account_balance_by_number(2, true)
+      {:ok, "30,00"}
+
+  """
+  @spec get_account_balance_by_number(integer, boolean) ::
+          {:error, String.t()} | {:ok, integer | String.t()}
   def get_account_balance_by_number(account_number, format \\ false) do
     if !is_integer(account_number), do: false
 
@@ -70,7 +89,24 @@ defmodule AccountService do
     end
   end
 
-  @spec get_account_by_number(integer) :: boolean | Account
+  @doc """
+  Return the account record from database by the account number.
+
+  ## Parameters
+
+    - account_number: Integer that represents the account number.
+
+  ## Examples
+
+      iex> AccountService.get_account_by_number(2)
+      %Account{
+        __meta__: #Ecto.Schema.Metadata<:loaded, "accounts">,
+        agency: 1,
+        balance: 3000...
+      }
+
+  """
+  @spec get_account_by_number(integer) :: boolean | Account | nil
   def get_account_by_number(account_number) do
     if !is_integer(account_number), do: false
 
@@ -81,7 +117,24 @@ defmodule AccountService do
     )
   end
 
-  @spec get_account_by_id(integer) :: boolean | Account
+  @doc """
+  Return the account record from database by the account id.
+
+  ## Parameters
+
+    - account_id: Integer that represents the account id (Database Primary Key).
+
+  ## Examples
+
+      iex> AccountService.get_account_by_id(2)
+      %Account{
+        __meta__: #Ecto.Schema.Metadata<:loaded, "accounts">,
+        agency: 1,
+        balance: 3000...
+      }
+
+  """
+  @spec get_account_by_id(integer) :: false | Account | nil
   def get_account_by_id(account_id) do
     if !is_integer(account_id), do: false
 
@@ -92,7 +145,11 @@ defmodule AccountService do
     )
   end
 
-  @spec get_all_accounts :: [Account]
+  @doc """
+  Return all accounts records from database.
+
+  """
+  @spec get_all_accounts :: [Account] | []
   def get_all_accounts do
     DB.all(
       Account
@@ -100,6 +157,27 @@ defmodule AccountService do
     )
   end
 
+  @doc """
+  Update a account record in the database by the account id.
+
+  ## Parameters
+
+  - id: Integer that represents the account id (Database Primary Key).
+  - data: Struct with the new data to be updated. Ex: %{name: "New name", currency: "USD"}
+
+  ## Examples
+
+    iex> AccountService.update_account_by_id(2, %{name: "New name", currency: "USD"})
+    %Account{
+      __meta__: #Ecto.Schema.Metadata<:loaded, "accounts">,
+      agency: 1,
+      balance: 3000,
+      name: "New name",
+      currency: "USD"...
+    }
+  """
+  @spec update_account_by_id(integer, %{}) ::
+          {:error, String.t()} | {:ok, Account}
   def update_account_by_id(id, data) do
     changes = Ecto.Changeset.cast(%Account{id: id}, data, [:name, :agency, :currency, :balance])
 
