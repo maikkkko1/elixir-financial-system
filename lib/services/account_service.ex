@@ -16,11 +16,11 @@ defmodule AccountService do
     - number: Integer that represents the account number. UNIQUE
     - agency: Integer that represents the account agency number.
     - currency - String that represents the account main currency.
-    - balance - Float that represents the account initial balance.
+    - balance - Integer that represents the account initial balance. Ex: 100 = 1,00 | 1000 = 10,00 | 5050 = 50,50
 
   ## Examples
 
-      iex> AccountService.create_account("Maikon", 12345, 1111, "brl", 100.0)
+      iex> AccountService.create_account("Maikon", 12345, 1111, "brl", 1000)
 
   """
   @spec create_account(String.t(), integer, integer, String.t(), integer) ::
@@ -62,10 +62,8 @@ defmodule AccountService do
   ## Examples
 
       iex> AccountService.get_account_balance_by_number(2)
-      {:ok, 3000}
 
       iex> AccountService.get_account_balance_by_number(2, true)
-      {:ok, "30,00"}
 
   """
   @spec get_account_balance_by_number(integer, boolean) ::
@@ -99,11 +97,6 @@ defmodule AccountService do
   ## Examples
 
       iex> AccountService.get_account_by_number(2)
-      %Account{
-        __meta__: #Ecto.Schema.Metadata<:loaded, "accounts">,
-        agency: 1,
-        balance: 3000...
-      }
 
   """
   @spec get_account_by_number(integer) :: boolean | Account | nil
@@ -127,11 +120,6 @@ defmodule AccountService do
   ## Examples
 
       iex> AccountService.get_account_by_id(2)
-      %Account{
-        __meta__: #Ecto.Schema.Metadata<:loaded, "accounts">,
-        agency: 1,
-        balance: 3000...
-      }
 
   """
   @spec get_account_by_id(integer) :: false | Account | nil
@@ -167,14 +155,7 @@ defmodule AccountService do
 
   ## Examples
 
-    iex> AccountService.update_account_by_id(2, %{name: "New name", currency: "USD"})
-    %Account{
-      __meta__: #Ecto.Schema.Metadata<:loaded, "accounts">,
-      agency: 1,
-      balance: 3000,
-      name: "New name",
-      currency: "USD"...
-    }
+    AccountService.update_account_by_id(1, %{name: "New name", currency: "USD"})
   """
   @spec update_account_by_id(integer, %{}) ::
           {:error, String.t()} | {:ok, Account}

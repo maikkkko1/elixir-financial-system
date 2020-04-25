@@ -1,9 +1,5 @@
 use Mix.Config
 
-config :financial_system, FinancialSystem.Repo,
-  adapter: Sqlite.Ecto2,
-  database: "financial_system.sqlite3"
-
 config :financial_system, ecto_repos: [FinancialSystem.Repo]
 
 config :money,
@@ -15,3 +11,14 @@ config :money,
   symbol_space: false,
   fractional_unit: true,
   strip_insignificant_zeros: false
+
+if System.get_env("MIX_ENV") == "test" do
+  config :financial_system, FinancialSystem.Repo,
+    adapter: Sqlite.Ecto2,
+    pool: Ecto.Adapters.SQL.Sandbox,
+    database: "test_db.sqlite3"
+else
+  config :financial_system, FinancialSystem.Repo,
+    adapter: Sqlite.Ecto2,
+    database: "db.sqlite3"
+end

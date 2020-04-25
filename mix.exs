@@ -8,6 +8,8 @@ defmodule FinancialSystem.MixProject do
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      elixirc_paths: elixirc_paths(Mix.env()),
+      aliases: aliases(),
 
       # Docs
       name: "Financial System",
@@ -18,6 +20,17 @@ defmodule FinancialSystem.MixProject do
         main: "api-reference",
         extras: ["README.md"]
       ]
+    ]
+  end
+
+  # Ensures `test/support/*.ex` files are read during tests
+  def elixirc_paths(:test), do: ["lib", "test/support"]
+  def elixirc_paths(_), do: ["lib"]
+
+  defp aliases do
+    [
+      # Ensures database is reset before tests are run
+      test: ["ecto.create --quiet", "ecto.migrate", "test", "ecto.drop --quiet"]
     ]
   end
 
