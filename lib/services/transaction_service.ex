@@ -47,10 +47,10 @@ defmodule TransactionService do
 
           account_new_balance = account.balance + converted_amount
 
-          update_balance =
+          updated_account =
             AccountService.update_account_by_id(account.id, %{balance: account_new_balance})
 
-          {:ok, update_balance}
+          {:ok, updated_account}
         else
           {:error, "Account not found!"}
         end
@@ -99,10 +99,10 @@ defmodule TransactionService do
 
             account_new_balance = account.balance - converted_amount
 
-            update_balance =
+            updated_account =
               AccountService.update_account_by_id(account.id, %{balance: account_new_balance})
 
-            {:ok, update_balance}
+            {:ok, updated_account}
         end
     end
   end
@@ -118,8 +118,8 @@ defmodule TransactionService do
 
   ## Examples
 
-      iex> TransactionService.transfer(1, 2 1000) # Transfering from account number 1 to account number 2 the amount of 10,00.
-      iex> TransactionService.transfer(1, 2, 2050) # Transfering from account number 1 to account number 2 the amount of 20,50.
+      TransactionService.transfer(1, 2 1000) # Transfering from account number 1 to account number 2 the amount of 10,00.
+      TransactionService.transfer(1, 2, 2050) # Transfering from account number 1 to account number 2 the amount of 20,50.
 
   """
   @spec transfer(integer, integer, integer) ::
