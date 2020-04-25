@@ -76,11 +76,18 @@ defmodule CurrencyService do
   """
   @spec is_valid_currency?(String.t()) :: boolean
   def is_valid_currency?(currency) do
-    if byte_size(currency) <= 0, do: false
+    cond do
+      currency == nil ->
+        false
 
-    currencies = get_valid_currencies()
+      String.length(currency) != 3 ->
+        false
 
-    Enum.member?(currencies, String.upcase(currency))
+      true ->
+        currencies = get_valid_currencies()
+
+        Enum.member?(currencies, String.upcase(currency))
+    end
   end
 
   @doc """

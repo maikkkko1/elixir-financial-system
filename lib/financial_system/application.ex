@@ -7,7 +7,8 @@ defmodule FinancialSystem.Application do
 
   def start(_type, _args) do
     children = [
-      FinancialSystem.Repo
+      FinancialSystem.Repo,
+      ApiEntryPoint
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

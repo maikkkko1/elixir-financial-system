@@ -5,6 +5,9 @@ defmodule Account do
 
   use Ecto.Schema
 
+  @derive {Poison.Encoder,
+           only: [:id, :name, :number, :agency, :currency, :balance, :inserted_at, :updated_at]}
+
   schema "accounts" do
     field(:name, :string, null: false)
     field(:number, :integer, null: false)
