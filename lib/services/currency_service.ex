@@ -6,8 +6,14 @@ defmodule CurrencyService do
   @base_url "https://api.exchangeratesapi.io/latest"
 
   @type conversion_result ::
-          {:error, <<_::64, _::_*8>>}
-          | {:ok, %{amount_converted: float, amount_to_convert: number, from: binary, to: binary}}
+          {:error, String.t()}
+          | {:ok,
+             %{
+               amount_converted: float,
+               amount_to_convert: number,
+               from: String.t(),
+               to: String.t()
+             }}
 
   use Tesla
 
@@ -25,9 +31,9 @@ defmodule CurrencyService do
 
   ## Examples
 
-      iex> Conversion.handle_conversion("usd", "brl", 1)
+      iex> CurrencyService.handle_conversion("usd", "brl", 1)
 
-      iex> Conversion.handle_conversion("unknowncurrency", "brl", 1)
+      iex> CurrencyService.handle_conversion("unknowncurrency", "brl", 1)
       {:error, "unknowncurrency isn't supported."}
 
   """
@@ -60,11 +66,14 @@ defmodule CurrencyService do
     end
   end
 
-  defp convert(rate, amount) do
-    (rate * amount)
-    |> Float.ceil(2)
-  end
+  @doc """
+  Return if is a valid currency.
 
+  ## Parameters
+
+    - currency: String that represents the 3 digits currency to validate.
+
+  """
   @spec is_valid_currency?(String.t()) :: boolean
   def is_valid_currency?(currency) do
     if byte_size(currency) <= 0, do: false
@@ -74,7 +83,11 @@ defmodule CurrencyService do
     Enum.member?(currencies, String.upcase(currency))
   end
 
-  @spec get_latest_rates :: {:error, <<_::272>>} | {:ok, any}
+  @doc """
+  Return the all the latest currencies rates.
+
+  """
+  @spec get_latest_rates :: {:error, String.t()} | {:ok, any}
   def get_latest_rates do
     {:ok, response} = request_rates("/")
 
@@ -85,7 +98,15 @@ defmodule CurrencyService do
     end
   end
 
-  @spec get_latest_rates(binary) :: {:error, <<_::272>>} | {:ok, any}
+  @doc """
+  Return the all the latest currencies rates based on some currency.
+
+  ## Parameters
+
+    - base: String that represents the 3 digits currency to be used as base.
+
+  """
+  @spec get_latest_rates(binary) :: {:error, String.t()} | {:ok, any}
   def get_latest_rates(base) when byte_size(base) > 0 do
     {:ok, response} = request_rates("?base=#{String.upcase(base)}")
 
@@ -96,11 +117,20 @@ defmodule CurrencyService do
     end
   end
 
+  @doc """
+  Return a list with all valid currencies.
+
+  """
   @spec get_valid_currencies :: [...]
   def get_valid_currencies do
     {:ok, rates} = get_latest_rates("USD")
 
     Map.keys(rates["rates"])
+  end
+
+  defp convert(rate, amount) do
+    (rate * amount)
+    |> Float.ceil(2)
   end
 
   defp request_rates(extend) do
