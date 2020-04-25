@@ -16,7 +16,7 @@ if System.get_env("MIX_ENV") == "test" do
   config :financial_system, FinancialSystem.Repo,
     adapter: Sqlite.Ecto2,
     pool: Ecto.Adapters.SQL.Sandbox,
-    timeout: 20000,
+    timeout: 60000,
     database: "test_db.sqlite3"
 else
   config :financial_system, FinancialSystem.Repo,
