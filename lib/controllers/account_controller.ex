@@ -85,11 +85,17 @@ defmodule AccountController do
   def update_account_by_id(id, body) do
     account_id = if is_nil(id), do: 0, else: id
 
-    account = account_id |> String.to_integer() |> AccountService.update_account_by_id(body)
+    parsed_id =
+      if account_id |> is_binary(), do: account_id |> String.to_integer(), else: account_id
+
+    account = parsed_id |> AccountService.update_account_by_id(body)
 
     case account do
       {:error, error} ->
         Response.response(error, true)
+
+      nil ->
+        Response.response("Account not found!", true)
 
       %Account{} ->
         Response.response(account)

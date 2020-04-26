@@ -1,5 +1,5 @@
 defmodule AccountControllerTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   doctest AccountController
 
   alias FinancialSystem.Repo
@@ -93,8 +93,84 @@ defmodule AccountControllerTest do
     assert create_account2.error == "Account number already exists!"
   end
 
+  test "should get a account by id" do
+    create_default_account()
+
+    account = AccountController.get_account_by_id(1)
+
+    assert account.result.name == "Maikon"
+  end
+
+  test "should try get a account by id with non exists id" do
+    account = AccountController.get_account_by_id(1)
+
+    assert account.error == "Account not found!"
+  end
+
+  test "should try get a account by id with nil id" do
+    account = AccountController.get_account_by_id(nil)
+
+    assert account.error == "Account not found!"
+  end
+
+  test "should get a account by number" do
+    create_default_account()
+
+    account = AccountController.get_account_by_number(123)
+
+    assert account.result.name == "Maikon"
+  end
+
+  test "should try get a account by id with non exists number" do
+    account = AccountController.get_account_by_number(1)
+
+    assert account.error == "Account not found!"
+  end
+
+  test "should try get a account by id with nil number" do
+    account = AccountController.get_account_by_number(nil)
+
+    assert account.error == "Account not found!"
+  end
+
+  test "should get a account formatted balance by number" do
+    create_default_account()
+
+    balance = AccountController.get_account_balance_by_number(123)
+
+    assert balance.result == "10,00"
+  end
+
+  test "should try get a account formatted balance by number with non exists number" do
+    balance = AccountController.get_account_balance_by_number(123)
+
+    assert balance.error == "Account not found"
+  end
+
+  test "should update a account name by id" do
+    create_default_account
+
+    updated_account = AccountController.update_account_by_id(1, %{"name" => "Test name"})
+
+    assert updated_account.result.name == "Test name"
+  end
+
+  test "should try update a account protected field by id" do
+    create_default_account
+
+    updated_account = AccountController.update_account_by_id(1, %{"number" => 444})
+
+    assert updated_account.result.number == 123
+  end
+
+  test "should try update a account by id with non exists number" do
+    updated_account = AccountController.update_account_by_id(1, %{"number" => 444})
+
+    assert updated_account.error == "Account not found!"
+  end
+
   def create_default_account do
-    account1 = %{
+    account = %{
       "name" => "Maikon",
       "number" => 123,
       "agency" => 1,
@@ -102,6 +178,6 @@ defmodule AccountControllerTest do
       "balance" => 1000
     }
 
-    AccountController.create_account(account1)
+    AccountController.create_account(account)
   end
 end

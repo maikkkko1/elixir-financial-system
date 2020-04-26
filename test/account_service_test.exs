@@ -1,5 +1,5 @@
 defmodule AccountServiceTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   doctest AccountService
 
   alias FinancialSystem.Repo
