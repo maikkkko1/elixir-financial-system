@@ -169,10 +169,26 @@ defmodule AccountControllerTest do
     assert updated_account.error == "Account not found!"
   end
 
-  def create_default_account do
+  test "should get all accounts from database, expected a list with 3 records" do
+    create_default_account()
+    create_default_account(1234)
+    create_default_account(12345)
+
+    accounts = AccountController.get_all_accounts()
+
+    assert accounts.result |> length == 3
+  end
+
+  test "should get all accounts from database, expected a empty list" do
+    accounts = AccountController.get_all_accounts()
+
+    assert accounts.result == []
+  end
+
+  def create_default_account(number \\ 123) do
     account = %{
       "name" => "Maikon",
-      "number" => 123,
+      "number" => number,
       "agency" => 1,
       "currency" => "brl",
       "balance" => 1000
