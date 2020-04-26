@@ -3,6 +3,27 @@ defmodule AccountController do
   Account controller, handle mostly the api requests.
   """
 
+  @doc """
+  Creates a new account via api.
+
+  ## Parameters
+
+    - body: Struct that represents all the account data to be created.
+
+  ## Examples
+
+      account = %{
+        "name" => "Maikon",
+        "number" => 123,
+        "agency" => 1,
+        "currency" => "brl",
+        "balance" => 1000
+      }
+
+      AccountController.create_account(account)
+
+  """
+  @spec create_account(%{}) :: %{error: String.t() | nil, result: any}
   def create_account(body) do
     create =
       AccountService.create_account(
@@ -22,6 +43,19 @@ defmodule AccountController do
     end
   end
 
+  @doc """
+  Return a account by ID via api.
+
+  ## Parameters
+
+    - id: Integer that represents the account id.
+
+  ## Examples
+
+      AccountController.get_account_by_id(1)
+
+  """
+  @spec get_account_by_id(integer) :: %{error: String.t() | nil, result: any}
   def get_account_by_id(id) do
     account_id = if is_nil(id), do: 0, else: id
 
@@ -39,6 +73,19 @@ defmodule AccountController do
     end
   end
 
+  @doc """
+  Return a account by NUMBER via api.
+
+  ## Parameters
+
+    - number: Integer that represents the account number.
+
+  ## Examples
+
+      AccountController.get_account_by_number(1)
+
+  """
+  @spec get_account_by_number(integer) :: %{error: String.t() | nil, result: any}
   def get_account_by_number(number) do
     account_number = if is_nil(number), do: false, else: number
 
@@ -59,12 +106,30 @@ defmodule AccountController do
     end
   end
 
+  @doc """
+  Return all accounts from database via api.
+
+  """
+  @spec get_all_accounts :: %{error: String.t() | nil, result: any}
   def get_all_accounts do
     accounts = AccountService.get_all_accounts()
 
     Response.response(accounts)
   end
 
+  @doc """
+  Return a account formatted balance by NUMBER via api.
+
+  ## Parameters
+
+    - number: Integer that represents the account number.
+
+  ## Examples
+
+      AccountController.get_account_balance_by_number(1)
+
+  """
+  @spec get_account_balance_by_number(integer) :: %{error: String.t() | nil, result: any}
   def get_account_balance_by_number(number) do
     account_number = if is_nil(number), do: false, else: number
 
@@ -82,6 +147,22 @@ defmodule AccountController do
     end
   end
 
+  @doc """
+  Update a account by ID via api.
+
+  ## Parameters
+
+    - id: Integer that represents the account id.
+    - body: Struct that represents all the account data to be updated.
+
+  ## Examples
+
+      update_data = %{"name" => "Test"}
+
+      AccountController.update_account_by_id(1, updated_data)
+
+  """
+  @spec update_account_by_id(integer, %{}) :: %{error: String.t() | nil, result: any}
   def update_account_by_id(id, body) do
     account_id = if is_nil(id), do: 0, else: id
 
