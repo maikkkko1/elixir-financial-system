@@ -13,7 +13,7 @@ defmodule Account do
     field(:number, :integer, null: false)
     field(:agency, :integer, null: false)
     field(:currency, :string, default: "BRL")
-    field(:balance, :integer, default: 0)
+    field(:balance, :integer)
     timestamps()
   end
 end

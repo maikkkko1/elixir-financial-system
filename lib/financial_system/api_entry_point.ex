@@ -12,6 +12,7 @@ defmodule ApiEntryPoint do
   plug(:dispatch)
 
   forward("/api/account", to: AccountRouter)
+  forward("/api/transaction", to: TransactionRouter)
 
   match _ do
     send_resp(conn, 404, Poison.encode!(%{error: "Requested endpoint not found!"}))
