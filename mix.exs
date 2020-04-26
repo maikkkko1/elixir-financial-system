@@ -8,6 +8,13 @@ defmodule FinancialSystem.MixProject do
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ],
       elixirc_paths: elixirc_paths(Mix.env()),
       aliases: aliases(),
 
@@ -30,7 +37,7 @@ defmodule FinancialSystem.MixProject do
   defp aliases do
     [
       # Ensures database is reset before tests are run
-      test: ["ecto.create --quiet", "ecto.migrate", "test", "ecto.drop --quiet"]
+      test: ["ecto.drop --quiet", "ecto.create --quiet", "ecto.migrate", "test"]
     ]
   end
 
@@ -54,7 +61,8 @@ defmodule FinancialSystem.MixProject do
       {:poison, "~> 3.1"},
       {:plug, "~> 1.6"},
       {:plug_cowboy, "~> 2.0"},
-      {:money, "~> 1.4"}
+      {:money, "~> 1.4"},
+      {:excoveralls, "~> 0.10", only: :test}
     ]
   end
 end
