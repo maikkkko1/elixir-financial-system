@@ -48,7 +48,7 @@ Para iniciarmos, o primeiro passo caso ainda não possua o Elixir instalado, é 
 
 O guia oficial pode ser seguido para realizar a instalação: [Guia oficial](https://elixir-lang.org/install.html)
 
-Após ter realizado a instalação caso necessário, clone o repositório e então na raiz do projeto, instale todas as dependências com o comando:
+Após ter realizado a instalação, clone o repositório e então na raiz do projeto, instale todas as dependências com o comando:
 
 ```
 mix deps.get
@@ -56,7 +56,7 @@ mix deps.get
 
 Com o sucesso deste comando, todas as dependências para o projeto funcionar devem estar instaladas.
 
-O último passo é criar o banco de dados e suas tabelas, para isso execute o comando:
+O último passo é criar o banco de dados e seu esquema, para isso execute o comando:
 
 ```
 mix ecto.migrate
@@ -64,15 +64,15 @@ mix ecto.migrate
 
 ## Utilização
 
-Existem duas formas de utilização do sistema, pelo **IEX** ou via **API**.
+Existem duas formas de utilização do sistema, pelo [IEX](#utilizando-pelo-iex) via [API](#utilizando-pela-api)
 
 ### Utilizando pelo IEX
 
-Primeiramente abra o terminal na raiz do projeto e acesse o IEX com o comando: 
+Primeiramente abra o terminal na raiz do projeto e acesse o **IEX** com o comando: 
 
 ```iex -S mix```
 
-Após esse comando, você deve estar dentro do IEX e então agora conseguimos utilizar todas as funcionalidades do nosso sistema financeiro.
+Após esse comando, você deve estar dentro do **IEX** e então agora conseguimos utilizar todas as funcionalidades do nosso sistema financeiro.
 
 Todas as operações necessitam de uma conta existente e se baseiam ou no **número** da conta ou no **ID** da conta.
 
@@ -104,7 +104,7 @@ iex(1)> AccountService.get_all_accounts()
 
 Todas as operações realizam o câmbio de valores em sua execução, com excessão da operação de **split**.
 
-Todas as operações financeiras são também transações, por esse motivo todas operações geram registros de transações no banco de dados de acordo com o tipo de operação. Também todos os valores devem ser representados por números inteiros.
+Todas as operações financeiras são também **transações**, por esse motivo todas operações geram registros de transações no banco de dados de acordo com o tipo de operação. Também todos os valores devem ser representados por números **inteiros**.
 
 ```elixir
 # Realizar um depósito na conta número 1234, na moeda "BRL" e no valor de 25,00. 
@@ -150,21 +150,21 @@ Para realizar o teste das requisições é recomendado a utilização dos client
 
 No momento nenhuma requisição necessita de **autenticação**.
 
-Antes de realizar as requisições para a API, é necessário iniciar o servidor HTTP com o comando:
+Antes de realizar as requisições para a **API**, é necessário iniciar o servidor **HTTP** com o comando:
 
 ```
 mix run --no-halt
 ```
 
-Agora com o servidor HTTP online, podem ser realizadas as requisições.
+Agora com o servidor **HTTP** online, podem ser realizadas as requisições.
 
-A documentação completa de todas as rotas disponíveis pela API está disponível no Postman pelo link:
+A **documentação** completa de todas as rotas disponíveis pela API está disponível no **Postman** pelo link:
 
-https://documenter.getpostman.com/view/5866737/SzfCSkA6?version=latest
+[Documentação da API](https://documenter.getpostman.com/view/5866737/SzfCSkA6?version=latest)
 
 ## Testes
 
-O projeto possuí tanto testes de unidade como testes de cobertura.
+O projeto possuí tanto testes de **unidade** como testes de **cobertura**.
 
 Para rodar os testes sem os detalhes de cobertura, no terminal e na raiz do projeto, execute o comando:
 
