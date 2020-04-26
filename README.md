@@ -56,6 +56,12 @@ mix deps.get
 
 Com o sucesso deste comando, todas as dependências para o projeto funcionar devem estar instaladas.
 
+O último passo é criar o banco de dados e suas tabelas, para isso execute o comando:
+
+```
+mix ecto.migrate
+```
+
 ## Utilização
 
 Existem duas formas de utilização do sistema, pelo **IEX** ou via **API**.
@@ -142,7 +148,7 @@ iex(1)> CurrencyService.handle_conversion("BRL", "USD", 10.00)
 
 Para realizar o teste das requisições é recomendado a utilização dos clientes REST [Insomnia](https://insomnia.rest/) ou [Postman](https://www.postman.com/).
 
-No momento nenhuma requisição necessita de autenticação.
+No momento nenhuma requisição necessita de **autenticação**.
 
 Antes de realizar as requisições para a API, é necessário iniciar o servidor HTTP com o comando:
 
@@ -155,3 +161,40 @@ Agora com o servidor HTTP online, podem ser realizadas as requisições.
 A documentação completa de todas as rotas disponíveis pela API está disponível no Postman pelo link:
 
 https://documenter.getpostman.com/view/5866737/SzfCSkA6?version=latest
+
+## Testes
+
+O projeto possuí tanto testes de unidade como testes de cobertura.
+
+Para rodar os testes sem os detalhes de cobertura, no terminal e na raiz do projeto, execute o comando:
+
+```
+MIX_ENV=test mix test
+```
+
+Para rodar com os detalhes de cobertura:
+
+```
+MIX_ENV=test mix coveralls
+```
+
+Também é possivel gerar um relatório HTML de cobertura que estará disponível na pasta **cover/**:
+
+```
+MIX_ENV=test mix coveralls.html
+```
+
+## Integração Contínua
+
+Para a integração contínua, foi utilizado o [Github Actions](https://github.com/features/actions), a configuração utilizada está disponível no arquivo **elixir.yml** no diretório **.github/workflows**.
+
+## Padronização de código
+
+Utilizando o comando ```mix format``` é possivel garantir que a base de código esteja de acordo com os padrões do Elixir.
+
+## Documentação
+
+Utilizando o comando ```mix docs``` é possivel gerar a documentação completa do projeto, que estará disponível nos arquivos **HTML** no diretório **/doc**.
+
+## Referências
+
