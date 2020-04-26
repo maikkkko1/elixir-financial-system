@@ -144,10 +144,14 @@ Para realizar o teste das requisições é recomendado a utilização dos client
 
 No momento nenhuma requisição necessita de autenticação.
 
-#### Operações de conta 
+Antes de realizar as requisições para a API, é necessário iniciar o servidor HTTP com o comando:
 
-Não são permitidas contas com o mesmo número de conta, este é um campo de indíce único.
-
-```json
-POST /api/account
 ```
+mix run --no-halt
+```
+
+Agora com o servidor HTTP online, podem ser realizadas as requisições.
+
+A documentação completa de todas as rotas disponíveis pela API está disponível no Postman pelo link:
+
+https://documenter.getpostman.com/view/5866737/SzfCSkA6?version=latest
