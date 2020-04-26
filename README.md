@@ -198,3 +198,9 @@ Utilizando o comando ```mix docs``` é possivel gerar a documentação completa 
 
 ## Referências
 
+* [Elixir School](https://elixirschool.com/pt/)
+* [Guia de Estilo Elixir](https://github.com/gusaiani/elixir_style_guide/blob/master/README_ptBR.md)
+* [Melhores Práticas na StoneCo](https://github.com/stone-payments/stoneco-best-practices/blob/master/README_pt.md)
+* [Ecto](https://hexdocs.pm/ecto/Ecto.html)
+* [Github Actions Documentation](https://help.github.com/pt/actions)
+* [Elixir Mix](https://elixir-lang.org/getting-started/mix-otp/introduction-to-mix.html#running-tests)
