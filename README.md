@@ -72,9 +72,14 @@ Todas as operações necessitam de uma conta existente e se baseiam ou no **núm
 
 #### Operações de conta 
 
+Não são permitidas contas com o mesmo número de conta, este é um campo de indíce único.
+
 ```elixir
-# Criar uma conta bancária com os seguintes dados: Nome: Maikon, Numero: 1234, Agência: 1111, Moeda: BRL e Saldo: 10,00.
+# Criar uma conta com os seguintes dados: Nome: Maikon, Numero: 1234, Agência: 1111, Moeda: BRL e Saldo: 10,00.
 iex(1)> AccountService.create_account("Maikon", 1234, 1111, "BRL", 1000)
+
+# Atualizar uma conta pelo seu ID do banco de dados.
+iex(1)> AccountService.update_account_by_id(1, %{name: "Nome atualizado", currency: "USD"})
 
 # Retornar o saldo formatado de uma conta pelo seu número.
 iex(1)> AccountService.get_account_balance_by_number(1234)
@@ -84,4 +89,65 @@ iex(1)> AccountService.get_account_by_number(1234)
 
 # Retornar todos os dados de uma conta pelo seu ID do banco de dados.
 iex(1)> AccountService.get_account_by_id(1)
+
+# Retornar todas as contas do banco de dados.
+iex(1)> AccountService.get_all_accounts()
+```
+
+#### Operações financeiras e transações 
+
+Todas as operações realizam o câmbio de valores em sua execução, com excessão da operação de **split**.
+
+Todas as operações financeiras são também transações, por esse motivo todas operações geram registros de transações no banco de dados de acordo com o tipo de operação. Também todos os valores devem ser representados por números inteiros.
+
+```elixir
+# Realizar um depósito na conta número 1234, na moeda "BRL" e no valor de 25,00. 
+# Considerar que a conta 1234 possuí a moeda BRL.
+iex(1)> TransactionService.deposit(1234, "BRL", 2500) # Sem câmbio pois a moeda é a mesma da conta.
+iex(1)> TransactionService.deposit(1234, "USD", 2500) # Com câmbio pois a moeda é diferente da conta.
+
+# Realizar um saque na conta número 1234, na moeda "BRL" e no valor de 12,50.
+# Considerar que a conta 1234 possuí a moeda BRL.
+iex(1)> TransactionService.withdraw(1234, "BRL", 2500) # Sem câmbio pois a moeda é a mesma da conta.
+iex(1)> TransactionService.withdraw(1234, "USD", 2500) # Com câmbio pois a moeda é diferente da conta.
+
+# Realizar uma transferência da conta número 1234, no valor de 200,33 para a conta número 4321.
+# Caso as duas contas possuam moedas diferentes, será realizado o câmbio dos valores antes da efetivação.
+iex(1)> TransactionService.transfer(1234, 4321, 20033)
+
+# Realizar o split de uma transação no valor de 500,00 entre duas contas.
+# O calculo da porcentagem de todas as contas deve ser igual a 100%.
+split_details = [
+  %{account_number: 1234, percentage: 25},
+  %{account_number: 4321, percentage: 75}
+]
+
+iex(1)> TransactionService.split(split_details, 50000)
+
+# Retornar todas as transações do banco de dados.
+iex(1)> TransactionService.get_all_transactions()
+```
+
+#### Câmbio de moedas
+
+No caso do câmbio de valores, os valores devem ser informados no formato **float**.
+
+```elixir
+
+# Realizar o câmbio de valores entre BRL e USD no valor de 10,00.
+iex(1)> CurrencyService.handle_conversion("BRL", "USD", 10.00)
+```
+
+### Utilizando pela API
+
+Para realizar o teste das requisições é recomendado a utilização dos clientes REST [Insomnia](https://insomnia.rest/) ou [Postman](https://www.postman.com/).
+
+No momento nenhuma requisição necessita de autenticação.
+
+#### Operações de conta 
+
+Não são permitidas contas com o mesmo número de conta, este é um campo de indíce único.
+
+```json
+POST /api/account
 ```
