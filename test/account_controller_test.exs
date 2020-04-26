@@ -148,7 +148,7 @@ defmodule AccountControllerTest do
   end
 
   test "should update a account name by id" do
-    create_default_account
+    create_default_account()
 
     updated_account = AccountController.update_account_by_id(1, %{"name" => "Test name"})
 
@@ -156,7 +156,7 @@ defmodule AccountControllerTest do
   end
 
   test "should try update a account protected field by id" do
-    create_default_account
+    create_default_account()
 
     updated_account = AccountController.update_account_by_id(1, %{"number" => 444})
 

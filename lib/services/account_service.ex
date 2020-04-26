@@ -142,6 +142,7 @@ defmodule AccountService do
     DB.all(
       Account
       |> select([account], account)
+      |> order_by(desc: :inserted_at)
     )
   end
 

@@ -217,6 +217,7 @@ defmodule TransactionService do
     DB.all(
       Transaction
       |> select([transaction], transaction)
+      |> order_by(desc: :inserted_at)
     )
   end
 
