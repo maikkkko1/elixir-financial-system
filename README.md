@@ -10,7 +10,7 @@ O objetivo deste projeto é ser um sistema financeiro capaz de disponibilizar di
 * Saques de contas;
 * Transferências entre contas;
 * Split de transações entre diversas contas;
-* Cãmbio de valores monetários;
+* Câmbio de valores monetários;
 
 Todas as operações acima estão em conformidade com a [ISO 4217](https://pt.wikipedia.org/wiki/ISO_4217)
 
