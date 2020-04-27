@@ -37,16 +37,15 @@ Também além do sistema utilizavel pelo shell interativo do **Elixir(IEX)**, ta
 * [Tesla](https://github.com/teamon/tesla) - Cliente HTTP utilizado para realizar as requisições.
 * [ExDoc](https://github.com/elixir-lang/ex_doc) - Utilizado para gerar a documentação completa do projeto.
 * [Cowboy](https://github.com/ninenines/cowboy) - Client HTTP utilizado para servir a API Rest.
-* [Poison](https://github.com/devinus/poison) - JSON Parser utilizado para realizar o encode/decode das requisições Rest.
-* [Plug](https://github.com/elixir-plug/plug) - Adaptador para o web server.
+* [Poison](https://github.com/devinus/poison) - JSON Parser utilizado para realizar o encode/decode das requisições HTTP.
 * [Money](https://github.com/elixirmoney/money) - Biblioteca para trabalhar com dinheiro.
 * [ExCoveralls](https://github.com/parroty/excoveralls) - Ferramenta utilizada para cobertura de testes.
 
 ## Instalação
 
-Para iniciarmos, o primeiro passo caso ainda não possua o Elixir instalado, é realizar a instalação do mesmo.
+Para iniciarmos, o primeiro passo caso ainda não possua o **Elixir** instalado, é realizar a instalação do mesmo.
 
-O guia oficial pode ser seguido para realizar a instalação: [Guia oficial](https://elixir-lang.org/install.html)
+O guia oficial pode ser seguido para realizar a instalação: [Guia Oficial de Instalação](https://elixir-lang.org/install.html)
 
 Após ter realizado a instalação, clone o repositório e então na raiz do projeto, instale todas as dependências com o comando:
 
@@ -74,11 +73,11 @@ Primeiramente abra o terminal na raiz do projeto e acesse o **IEX** com o comand
 
 Após esse comando, você deve estar dentro do **IEX** e então agora conseguimos utilizar todas as funcionalidades do nosso sistema financeiro.
 
-Todas as operações necessitam de uma conta existente e se baseiam ou no **número** da conta ou no **ID** da conta.
+Todas as operações necessitam de uma conta existente e se baseiam no **número** ou **ID** da conta.
 
 #### Operações de conta 
 
-Não são permitidas contas com o mesmo número de conta, este é um campo de indíce único.
+Não são permitidas contas com o mesmo número de conta, este é um campo de **indíce único**.
 
 ```elixir
 # Criar uma conta com os seguintes dados: Nome: Maikon, Numero: 1234, Agência: 1111, Moeda: BRL e Saldo: 10,00.
@@ -102,9 +101,11 @@ iex(1)> AccountService.get_all_accounts()
 
 #### Operações financeiras e transações 
 
+Todos os valores devem ser representados por números **inteiros** como descrito na seção [Solução](#solução).
+
 Todas as operações realizam o câmbio de valores em sua execução, com excessão da operação de **split**.
 
-Todas as operações financeiras são também **transações**, por esse motivo todas operações geram registros de transações no banco de dados de acordo com o tipo de operação. Também todos os valores devem ser representados por números **inteiros**.
+Todas as operações financeiras são também **transações**, por esse motivo todas operações geram registros de transações no banco de dados de acordo com o tipo de operação
 
 ```elixir
 # Realizar um depósito na conta número 1234, na moeda "BRL" e no valor de 25,00. 
