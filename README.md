@@ -64,7 +64,7 @@ mix ecto.migrate
 
 ## Utilização
 
-Existem duas formas de utilização do sistema, pelo [IEX](#utilizando-pelo-iex) via [API](#utilizando-pela-api)
+Existem duas formas de utilização do sistema, pelo [IEX](#utilizando-pelo-iex) ou via [API](#utilizando-pela-api).
 
 ### Utilizando pelo IEX
 
