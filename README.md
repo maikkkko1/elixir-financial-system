@@ -27,9 +27,9 @@ Exemplos de como os valores são representados:
 * 0,10 - 10
 * 0,01 - 1
 
-Para a persistência de dados foi utilizado o SQLite3.
+Para a persistência de dados foi utilizado o **SQLite3**.
 
-Também além do sistema utilizavel pelo shell interativo do Elixir(IEX), também foi desenvolvida uma API Rest capaz de realizar todas as mesmas operações que o shell interativo.
+Também além do sistema utilizavel pelo shell interativo do **Elixir(IEX)**, também foi desenvolvida uma **API Rest** capaz de realizar todas as mesmas operações que o shell interativo via **requisições HTTP**.
 
 ## Dependências
 
